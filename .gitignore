@@ -17,3 +17,6 @@
 /yarn-error.log
 
 .byebug_history
+
+# Ignore Spring files.  Guard使用時にSpringとgitの競合を防ぐ
+/spring/*.pid
