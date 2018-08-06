@@ -18,5 +18,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       #  登録成功後にどのテンプレートが表示されるかのテスト。
       # => showページに関するほぼ全てのエラーが出ないかを検証している
       assert_template 'users/show'
+
+      # ユーザー登録が終わったユーザーがログインできているかのテスト
+      assert is_logged_in?
     end
 end
