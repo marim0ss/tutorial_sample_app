@@ -12,6 +12,10 @@ class SessionsController < ApplicationController
     # authenticate... 認証に失敗した時にfalseを返すメソッド
     if user && user.authenticate(params[:session][:password])
       # log_in.....helper/sessions_helper.rbで定義したメソッド
+
+      # if文と同等↓  @remember_meチェックボックス.checkされてたら記憶、外れてたら忘れる。remember userコードを書き換え
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+
       log_in user
       redirect_to user
     else
@@ -23,7 +27,7 @@ class SessionsController < ApplicationController
 
   # deleteにDELETE送信するとログアウトする
   def destroy
-    log_out
+    log_out if logged_in?   #logged_inがtrueの場合のみlog_outを実行する
     redirect_to root_url
   end
 
