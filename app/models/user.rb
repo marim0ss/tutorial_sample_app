@@ -12,9 +12,12 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
                           # case_sensitiveにfalseを指定すると、大文字小文字を差を無視する
+
+
   # パスワード
   has_secure_password
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
+  # allow_nil: true   パスワードが空でも行為sんできるようにする例外処理
 
   # 渡された文字列のハッシュ値を返す
   # fixture向けのdigestメソッドを追加する
