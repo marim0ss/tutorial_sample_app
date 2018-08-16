@@ -17,10 +17,9 @@ class User < ApplicationRecord
   # パスワード
   has_secure_password
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-  # allow_nil: true   パスワードが空でも行為sんできるようにする例外処理
+                # allow_nil: true   パスワードが空でも行為sんできるようにする例外処理
 
-  # 渡された文字列のハッシュ値を返す
-  # fixture向けのdigestメソッドを追加する
+  # 渡された文字列のハッシュ値を返す====================================================
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                   BCrypt::Engine.cost

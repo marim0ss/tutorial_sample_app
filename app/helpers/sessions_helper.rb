@@ -3,7 +3,7 @@ module SessionsHelper
   def log_in(user)
     session[:user_id] = user.id
   end
-  # ユーザーのセッションを永続的にする
+  # ユーザーのセッションを永続的にする========================================
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id
@@ -11,7 +11,7 @@ module SessionsHelper
   end
 
 
-  # 渡されたユーザーがログイン済みユーザーであればtrueを返す
+  # 渡されたユーザーがログイン済みユーザーであればtrueを返す====================
   def current_user?(user)
     user == current_user
   end

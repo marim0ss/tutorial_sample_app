@@ -9,15 +9,14 @@ class SessionsController < ApplicationController
   # createにPOST送信するとログインする
   def create
     user = User.find_by(email: params[:session][:email].downcase)
-    # authenticate... 認証に失敗した時にfalseを返すメソッド
-    if user && user.authenticate(params[:session][:password])
-      # log_in.....helper/sessions_helper.rbで定義したメソッド
+    if user && user.authenticate(params[:session][:password])      # authenticate..認証に失敗した時にfalseを返すメソッド
 
-      log_in user
-      # if文と同等↓  @remember_meチェックボックス.checkされてたら記憶、外れてたら忘れる。remember userコードを書き換え
+      log_in user         # app/helper/sessions_helper.rbで定義したメソッド
+
+      # if文と同等↓  @remember_meチェックボックスがONなら記憶、OFFなら忘れる。"remember user"としていたのを書き換え
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-
       redirect_back_or user    #フレンドリーフォワーディングを備えたリダイレクト
+
     else
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'

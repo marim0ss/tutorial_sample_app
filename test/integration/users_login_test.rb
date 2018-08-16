@@ -57,16 +57,16 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
 
    # remember meチェックボックスのテスト==========================
    test "login with remembering" do
-     log_in_as(@user, remember_me: '1')
-     assert_not_empty cookies['remember_token']
+     log_in_as(@user, remember_me: '1')   #remember_me:ONでログインすると
+     assert_not_empty cookies['remember_token']   #cookiesにremember_tokenが入るはずである
    end
 
    test "login without remembering" do
-     # クッキーを保存してログイン
+     # クッキーを保存してログインする
      log_in_as(@user, remember_me: '1')
      delete logout_path
-     # クッキーを削除してログイン
+     # クッキーを削除してログインする
      log_in_as(@user, remember_me: '0')
-     assert_empty cookies['remember_token']
+     assert_empty cookies['remember_token']    #cookiesが空になるはずである
    end
 end

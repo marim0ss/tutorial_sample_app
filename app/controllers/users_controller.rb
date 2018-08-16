@@ -1,11 +1,16 @@
 class UsersController < ApplicationController
 
-  before_action :logged_in_user, only: [:index, :edit, :update]
+  # ログインしているユーザーかどうか確認してから操作させている
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+
   before_action :correct_user, only: [:edit, :update]
+
+  # destroyを管理者だけが行えるように指定
+  before_action :admin_user,  only: :destroy
 
 
   def index
-    @users = User.paginate(page:params[:page])
+    @users = User.paginate(page: params[:page])
   end
 
   def show
@@ -42,8 +47,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "Profile deleted"
+    redirect_to users_url     #indexへリダイレクト
+  end
 
-  # Rubyのprivateキーワードで、このメソッドを外部からは使えないようにできる
+  # Rubyのprivateキーワードで、このメソッドを外部からは使えないようにできる=================
   private
 
     def user_params
@@ -54,16 +64,21 @@ class UsersController < ApplicationController
     # ログイン済みのユーザーかどうか確認する
     def logged_in_user
       unless logged_in?
-        store_location   # リクエストしたページを保存
+        store_location   # リクエストしたページを保存  app/helpers/sessions_helper.rbで定義したメソッド
         flash[:danger] = "Please log in."
         redirect_to login_url
       end
     end
 
     # 正しいユーザーかどうか確認、別のユーザーがedit,updateできないようにする
-    # edit,updateの@user = User(params[:id])の代わりにこれを使用
+        # edit,updateの@user = User(params[:id])の代わりにこれを使用
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      redirect_to(root_url) unless current_user?(@user)     #current_user?メソッド：app/helpers/sessions_helper.rb
+    end
+
+    # 管理者かどうか確認   現在のユーザーがadmin=trueにならない時はリダイレクト
+    def admin_user
+      redirect_to(root_url) unless current_user.admin?
     end
 end

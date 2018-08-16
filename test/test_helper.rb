@@ -25,6 +25,7 @@ end
 class ActionDispatch::IntegrationTest
 
   # テストユーザーとしてログインする
+  # remember_me が1 => チェックボックスがオンの状態のこと。0ならOFF
   def log_in_as(user, password: 'password', remember_me: '1')
     post login_path, params: { session: { email: user.email,
                                           password: password,
