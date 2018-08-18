@@ -1,8 +1,9 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token
+  attr_accessor :remember_token, :activation_token
   # before_save  保存直前に実行されるメソッド
-    #これで、データベースに保存される直前にemailの文字列は全て小文字変換される
-  before_save { self.email = email.downcase }
+    #メソッドは下で定義.データベースに保存される直前にemailの文字列は全て小文字変換される
+  before_save   :downcase_email
+  before_create :create_activation_digest
 
   validates :name,  presence: true, length: {maximum: 50 }
 
@@ -43,5 +44,18 @@ class User < ApplicationRecord
   # ユーザーのログイン情報を破棄する
   def forget
     update_attribute(:remember_digest, nil)     #記憶ダイジェストを更新している
+  end
+
+
+private
+
+  # メールアドレスをすべて小文字にする
+  def downcase_email
+    self.email = email.downcase
+  end
+  # 有効化トークンとダイジェストを作成および代入する
+  def create_activation_digest
+    self.activation_token  = User.new_token
+    self.activation_digest = User.digest(activation_token)
   end
 end
