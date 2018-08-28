@@ -24,11 +24,18 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+=begin
       log_in @user   #ユーザー登録したらそのままログイン状態にさせる
       # 保存成功の時の処理
       flash[:success] = "Welcom to the Sample App!"
       redirect_to @user
       # ↑ redirect_to user_url(@userと一緒)
+=end
+
+      # 11.23 アカウント有効化を追加 11.36モデルからメールを送信する
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
     else
       # 保存失敗の時
       render 'new'
