@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token
   # before_save  保存直前に実行されるメソッド
     #メソッドは下で定義.データベースに保存される直前にemailの文字列は全て小文字変換される

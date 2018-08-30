@@ -19,3 +19,12 @@ User.create!(name:  "Example User",
                activated: true,
                activated_at: Time.zone.now)
 end
+
+#13.25サンプルデータに投稿を追加
+  # order 最初の(idの小さい順)から指定
+  # take(6) 6人だけ使う
+users = User.order(:created_at).take(6)
+50.times do
+  content = Faker::Lorem.sentence(5)
+  users.each { |user| user.microposts.create!(content: content) }
+end
